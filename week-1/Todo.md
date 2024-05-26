@@ -1,0 +1,25 @@
+# week 1 JS topics
+
+- let const var
+- DataTypes and ECMA standards
+- DataType conversion confusion
+- Why string to number
+- Comparision of datatypes
+- Stack and heap memory
+- string in JS
+- Number and maths
+- date and time
+- Array in JS
+- Objects in JS
+- Objects destructuring and JSON API
+- Functions and parameters
+- Function with objects
+- Global and local scope
+- Scope level and mini hoisting
+- this and arrow function
+- Immediately invoked function 
+- Control flow in JS
+- for loop break and continue
+- while do while loop
+- High order array loops
+- filter map and reduce
