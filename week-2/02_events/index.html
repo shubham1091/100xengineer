@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <title>Events</title>
+  </head>
+  <body style="background-color: #414141; color: aliceblue">
+    <div>
+      <ul id="images">
+        <li>
+          <img
+            width="200px"
+            id="code"
+            src="https://images.unsplash.com/photo-1518818608552-195ed130cdf4?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            alt="hitesh-sir"
+          />
+        </li>
+        <li>
+          <img
+            width="200px"
+            id="py"
+            src="https://images.unsplash.com/photo-1526379095098-d400fd0bf935?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDN8fHxlbnwwfHx8fHw%3D"
+            alt=""
+          />
+        </li>
+        <li>
+          <img
+            width="200px"
+            id="code-debug"
+            src="https://images.unsplash.com/photo-1564931768730-7e4d8e240044?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwcm9maWxlLXBhZ2V8MzF8fHxlbnwwfHx8fHw%3D"
+            alt=""
+          />
+        </li>
+        <li>
+          <img
+            width="200px"
+            id="ML"
+            src="https://images.unsplash.com/photo-1526379045084-713006d17a23?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwcm9maWxlLXBhZ2V8NTh8fHxlbnwwfHx8fHw%3D"
+            alt=""
+          />
+        </li>
+        <li>
+          <a
+            style="color: aliceblue"
+            href="https://google.com"
+            id="google"
+            >Google</a
+          >
+        </li>
+      </ul>
+    </div>
+  </body>
+  <script>
+    //document.getElementById("code").onclick = function (e) {
+    // alert("code clicked");
+    //};
+
+    document.getElementById("code").addEventListener(
+      "click",
+      (e) => {
+        //console.log(e);
+        //alert("code clicked");
+        console.log("code clicked");
+        e.stopPropagation();
+      },
+      false
+    );
+    // type,timestamp, defaultPrevented, target, toElement, srcElemnt, currentTarget,
+    // clientX, clientY, screenX, screenY,
+    // altkey, ctrlkey, shiftkey, keyCode
+
+    document.getElementById("images").addEventListener(
+      "click",
+      (e) => {
+        console.log("clicked inside the ul");
+      },
+      false
+    );
+
+    document.getElementById("google").addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      console.log("google clicked");
+    });
+
+    document.querySelector("ul").addEventListener("click", (e) => {
+      console.log(e.target.tagName === "IMG");
+      if (e.target.tagName === "IMG") {
+        let removeIt = e.target.parentNode;
+        removeIt.remove();
+      }
+      //removeIt.parentNode.removeChild(removeIt);
+    });
+  </script>
+</html>
