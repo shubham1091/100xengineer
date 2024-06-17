@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { adminMiddleware } from "../middleware/admin.js";
 import { Admin, Course } from "../db/index.js";
+import jwt from "jsonwebtoken";
 
 const router = Router();
 
@@ -23,13 +24,52 @@ router.post("/signup", async (req, res) => {
 
     const existingAdmin = await Admin.findOne({ username });
     if (existingAdmin) {
-      return res.status(400).json({ message: "Username already exists" });
+      res.status(400).json({ message: "Username already exists" });
+      return;
     }
 
     const admin = await Admin.create({ username, password });
-    res.status(201).json({ message: "Admin created successfully", admin });
+    const token = `Bearer ${jwt.sign(
+      { username, id: admin._id },
+      process.env.JWT_SECRET
+    )}`;
+    res.status(201).json({ message: "Admin created successfully", token });
   } catch (error) {
     console.error("Admin signup error:", error.message);
+    res.status(500).json({ message: error.message });
+  }
+});
+
+/**
+ * @route POST /signin
+ * @description Sign in an admin
+ * @param {string} username - The username of the admin
+ * @param {string} password - The password of the admin
+ * @returns {Object} 200 - Admin signed in successfully with a token
+ * @returns {Object} 401 - Unauthorized: Admin not found
+ * @returns {Object} 500 - server error
+ */
+router.post("/signin", async (req, res) => {
+  const { username, password } = req.body;
+
+  try {
+    if (!username || !password) {
+      throw new Error("Username and password are required");
+    }
+
+    const admin = await Admin.findOne({ username, password });
+    if (!admin) {
+      res.status(401).json({ message: "Unauthorized: Admin not found" });
+      return;
+    }
+
+    const token = `Bearer ${jwt.sign(
+      { username, id: admin._id },
+      process.env.JWT_SECRET
+    )}`;
+    res.status(200).json({ message: "Admin signed in successfully", token });
+  } catch (error) {
+    console.error("Signin error:", error.message);
     res.status(500).json({ message: error.message });
   }
 });
@@ -58,7 +98,7 @@ router.post("/courses", adminMiddleware, async (req, res) => {
       description,
       price,
       imageLink,
-      author: req.admin._id,
+      author: req.authorId,
     });
 
     res.status(201).json({ message: "Course created successfully", course });
@@ -77,11 +117,11 @@ router.post("/courses", adminMiddleware, async (req, res) => {
  */
 router.get("/courses", adminMiddleware, async (req, res) => {
   try {
-    const courses = await Course.find({ author: req.admin._id });
+    const courses = await Course.find({ author: req.authorId });
 
     res.status(200).json({ message: "Courses fetched successfully", courses });
   } catch (error) {
-    console.log(error);
+    console.error("Admin get courses error:", error.message);
     res.status(500).json({ message: "Internal server error" });
   }
 });

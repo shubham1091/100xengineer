@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { userMiddleware } from "../middleware/user.js";
 import { Course, User } from "../db/index.js";
+import jwt from "jsonwebtoken";
 
 const router = Router();
 
@@ -10,7 +11,7 @@ const router = Router();
  * @param {string} username - The username of the new user
  * @param {string} password - The password of the new user
  * @returns {Object} 201 - User created successfully
- * @returns {Object} 400 - Username and password are required or username already exists
+ * @returns {Object} 400 - Username already exists
  * @returns {Object} 500 - server error
  */
 router.post("/signup", async (req, res) => {
@@ -23,13 +24,52 @@ router.post("/signup", async (req, res) => {
 
     const existingUser = await User.findOne({ username });
     if (existingUser) {
-      return res.status(400).json({ message: "Username already exists" });
+      res.status(400).json({ message: "Username already exists" });
+      return;
     }
 
     const user = await User.create({ username, password });
-    res.status(201).json({ message: "User created successfully", user });
+    const token = `Bearer ${jwt.sign(
+      { username, id: user._id },
+      process.env.JWT_SECRET
+    )}`;
+    res.status(201).json({ message: "User created successfully", token });
   } catch (error) {
     console.error("User signup error:", error.message);
+    res.status(500).json({ message: error.message });
+  }
+});
+
+/**
+ * @route POST /signin
+ * @description Sign in an user
+ * @param {string} username - The username of the admin
+ * @param {string} password - The password of the admin
+ * @returns {Object} 200 - user signed in successfully with a token
+ * @returns {Object} 401 - Unauthorized: user not found
+ * @returns {Object} 500 - server error
+ */
+router.post("/signin", async (req, res) => {
+  const { username, password } = req.body;
+
+  try {
+    if (!username || !password) {
+      throw new Error("Username and password are required");
+    }
+
+    const user = await User.findOne({ username, password });
+    if (!user) {
+      res.status(401).json({ message: "Unauthorized: user not found" });
+      return;
+    }
+
+    const token = `Bearer ${jwt.sign(
+      { username, id: user._id },
+      process.env.JWT_SECRET
+    )}`;
+    res.status(200).json({ message: "user signed in successfully", token });
+  } catch (error) {
+    console.error("Signin error:", error.message);
     res.status(500).json({ message: error.message });
   }
 });
@@ -46,7 +86,7 @@ router.get("/courses", async (req, res) => {
 
     res.status(200).json({ message: "Courses fetched successfully", courses });
   } catch (error) {
-    console.log(error);
+    console.error("User get courses error:", error.message);
     res.status(500).json({ message: "Internal server error" });
   }
 });
@@ -64,7 +104,7 @@ router.post("/courses/:courseId", userMiddleware, async (req, res) => {
 
   try {
     await User.updateOne(
-      { _id: req.user._id },
+      { _id: req.authorId },
       { $addToSet: { purchasedCourses: courseId } }
     );
 
@@ -84,8 +124,9 @@ router.post("/courses/:courseId", userMiddleware, async (req, res) => {
  */
 router.get("/purchasedCourses", userMiddleware, async (req, res) => {
   try {
+    const user = await User.findById(req.authorId);
     const courses = await Course.find({
-      _id: { $in: req.user.purchasedCourses },
+      _id: { $in: user.purchasedCourses },
     });
     res
       .status(200)

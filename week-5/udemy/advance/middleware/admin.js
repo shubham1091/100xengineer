@@ -1,33 +1,58 @@
-import { Admin } from "../db/index.js";
+import jwt from "jsonwebtoken";
 
 /**
- * Middleware to authenticate admins based on username and password.
+ * Middleware to authenticate admins based on JWT.
  * @middleware adminMiddleware
  * @param {Object} req - The request object
- * @param {Object} req.headers - The headers object containing username and password
- * @param {string} req.headers.username - Username of the admin
- * @param {string} req.headers.password - Password of the admin
+ * @param {string} req.headers.authorization - Bearer token
  * @param {Object} res - The response object
  * @param {Function} next - The next middleware function
  * @returns {void}
  */
 export async function adminMiddleware(req, res, next) {
-  const { username, password } = req.headers;
+  const authHeader = req.headers.authorization;
+  // console.log("Auth header:", authHeader);
+
+  if (!authHeader) {
+    console.log("Authorization header missing");
+    return res
+      .status(401)
+      .json({ message: "Unauthorized: Authorization header missing" });
+  }
+
+  const tokenParts = authHeader.split(" ");
+
+  if (tokenParts.length !== 2 || tokenParts[0] !== "Bearer") {
+    console.log("Invalid token format");
+    return res
+      .status(401)
+      .json({ message: "Unauthorized: Invalid token format" });
+  }
+
+  const token = tokenParts[1];
 
   try {
-    if (!username || !password) {
-      throw new Error("Username and password are required");
+    const payload = jwt.verify(token, process.env.JWT_SECRET);
+
+    if (!payload.username || !payload.id) {
+      console.log("Invalid token payload");
+      return res
+        .status(401)
+        .json({ message: "Unauthorized: Invalid token payload" });
     }
 
-    const admin = await Admin.findOne({ username, password });
-    if (!admin) {
-      return res.status(401).json({ message: "Invalid username or password" });
-    }
-
-    req.admin = admin;
+    req.authorId = payload.id;
     next();
-  } catch (error) {
-    console.error("Admin middleware error:", error.message);
-    res.status(400).json({ message: error.message });
+  } catch (err) {
+    if (err.name === "JsonWebTokenError") {
+      console.log("JWT error:", err.message);
+      return res.status(401).json({ message: "Unauthorized: Invalid token" });
+    } else if (err.name === "TokenExpiredError") {
+      console.log("JWT expired:", err.message);
+      return res.status(401).json({ message: "Unauthorized: Token expired" });
+    } else {
+      console.error("Internal server error:", err);
+      return res.status(500).json({ message: "Internal server error" });
+    }
   }
 }
