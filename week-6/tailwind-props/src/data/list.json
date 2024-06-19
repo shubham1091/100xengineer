@@ -1,0 +1,48 @@
+[
+    {
+        "username": "Linus Torvalds",
+        "btnText": "view profile",
+        "imgUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Lc3_2018_%28263682303%29_%28cropped%29.jpeg/220px-Lc3_2018_%28263682303%29_%28cropped%29.jpeg",
+        "about": "Creator of Linux and Git."
+    },
+    {
+        "username": "Guido van Rossum",
+        "btnText": "view profile",
+        "imgUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Guido_van_Rossum_in_PyConUS24.jpg/220px-Guido_van_Rossum_in_PyConUS24.jpg",
+        "about": "Creator of Python."
+    },
+    {
+        "username": "Margaret Hamilton",
+        "imgUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Margaret_Hamilton_1995.jpg/220px-Margaret_Hamilton_1995.jpg",
+        "about": "Led the software team for Apollo missions."
+    },
+    {
+        "username": "Brendan Eich",
+        "btnText": "view profile",
+        "imgUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Brendan_Eich_Mozilla_Foundation_official_photo.jpg/220px-Brendan_Eich_Mozilla_Foundation_official_photo.jpg",
+        "about": "Creator of JavaScript."
+    },
+    {
+        "username": "Bjarne Stroustrup",
+        "btnText": "view profile",
+        "imgUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Bjarne-stroustrup_%28cropped%29.jpg/220px-Bjarne-stroustrup_%28cropped%29.jpg",
+        "about": "Creator of C++."
+    },
+    {
+        "username": "Marissa Mayer",
+        "imgUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Marissa_Mayer%2C_World_Economic_Forum_2013_III.jpg/220px-Marissa_Mayer%2C_World_Economic_Forum_2013_III.jpg",
+        "about": "Former CEO of Yahoo and early Google engineer."
+    },
+    {
+        "username": "Satya Nadella",
+        "btnText": "view profile",
+        "imgUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/MS-Exec-Nadella-Satya-2017-08-31-22_%28cropped%29.jpg/220px-MS-Exec-Nadella-Satya-2017-08-31-22_%28cropped%29.jpg",
+        "about": "CEO of Microsoft."
+    },
+    {
+        "username": "Sundar Pichai",
+        "btnText": "view profile",
+        "imgUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Sundar_Pichai_-_2023_%28cropped%29.jpg/220px-Sundar_Pichai_-_2023_%28cropped%29.jpg",
+        "about": "CEO of Alphabet Inc. and Google LLC."
+    }
+]
