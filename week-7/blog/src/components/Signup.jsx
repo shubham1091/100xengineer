@@ -17,27 +17,26 @@ export const Signup = () => {
     try {
       const userData = await authService.createAccount(data);
       if (userData) {
-        const data = await authService.getCurrentUser();
-        if (data) {
-          dispatch(login(data));
-          navigate("/");
+        const currentUser = await authService.getCurrentUser();
+        if (currentUser) {
+          dispatch(login(currentUser));
         }
+        navigate("/");
       }
     } catch (error) {
       setError(error.message);
     }
   };
+
   return (
-    <div className="flex items-center justify-center ">
-      <div
-        className={`mx-auto w-full max-w-lg bg-gray-100 rounded-xl p-10 border border-black/10`}
-      >
+    <div className="flex items-center justify-center">
+      <div className="mx-auto w-full max-w-lg bg-gray-100 rounded-xl p-10 border border-black/10">
         <div className="mb-2 flex justify-center">
           <span className="inline-block w-full max-w-[100px]">
             <Logo width="100%" />
           </span>
         </div>
-        <p className="mt-2 text-center textbase text-black/60">
+        <p className="mt-2 text-center text-base text-black/60">
           Already have an account?&nbsp;
           <Link
             to="/login"
@@ -53,27 +52,33 @@ export const Signup = () => {
         >
           <div className="space-y-5">
             <Input
-              label="Name:"
-              placeholder="Enter your name"
+              label="Full Name: "
+              placeholder="Enter your full name"
               {...register("name", { required: true })}
             />
             <Input
-              label="Email:"
+              label="Email: "
               type="email"
               placeholder="Enter your email"
-              {...register("email", { required: true })}
+              {...register("email", {
+                required: true,
+                pattern: {
+                  value: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
+                  message: "Email address must be a valid address",
+                },
+              })}
             />
             <Input
-              label="Password:"
+              label="Password: "
               type="password"
               placeholder="Enter your password"
               {...register("password", { required: true })}
             />
             <Button
-              type="subit"
+              type="submit"
               className="w-full"
             >
-              Sing up
+              Sign up
             </Button>
           </div>
         </form>

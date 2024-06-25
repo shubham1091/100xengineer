@@ -7,8 +7,9 @@ export class Service {
   bucket;
 
   constructor() {
-    this.client.setEndpoint(config.appwriteUrl);
-    this.client.setProject(config.projectId);
+    this.client
+      .setEndpoint(config.appwriteUrl)
+      .setProject(config.appwriteProjectId);
 
     this.databases = new Databases(this.client);
     this.bucket = new Storage(this.client);
@@ -23,7 +24,8 @@ export class Service {
         { title, content, featuredImage, status, userId }
       );
     } catch (error) {
-      console.error(error);
+      console.error("Error creating post:", error.message, error.stack);
+      throw error; // Propagate the error
     }
   }
 
@@ -36,7 +38,8 @@ export class Service {
         { title, content, featuredImage, status }
       );
     } catch (error) {
-      console.error(error);
+      console.error("Error updating post:", error.message, error.stack);
+      throw error; // Propagate the error
     }
   }
 
@@ -49,7 +52,7 @@ export class Service {
       );
       return true;
     } catch (error) {
-      console.error(error);
+      console.error("Error deleting post:", error.message, error.stack);
       return false;
     }
   }
@@ -62,7 +65,8 @@ export class Service {
         slug
       );
     } catch (error) {
-      console.error(error);
+      console.error("Error getting post:", error.message, error.stack);
+      throw error; // Propagate the error
     }
   }
 
@@ -74,11 +78,11 @@ export class Service {
         queries
       );
     } catch (error) {
-      console.error(error);
+      console.error("Error getting posts:", error.message, error.stack);
+      throw error; // Propagate the error
     }
   }
 
-  // file upload
   async uploadFile(file) {
     try {
       return await this.bucket.createFile(
@@ -87,7 +91,8 @@ export class Service {
         file
       );
     } catch (error) {
-      console.error(error);
+      console.error("Error uploading file:", error.message, error.stack);
+      throw error; // Propagate the error
     }
   }
 
@@ -96,7 +101,7 @@ export class Service {
       await this.bucket.deleteFile(config.appwriteBucketId, fileId);
       return true;
     } catch (error) {
-      console.error(error);
+      console.error("Error deleting file:", error.message, error.stack);
       return false;
     }
   }
@@ -105,7 +110,8 @@ export class Service {
     try {
       return this.bucket.getFilePreview(config.appwriteBucketId, fileId);
     } catch (error) {
-      console.error(error);
+      console.error("Error previewing file:", error.message, error.stack);
+      throw error; // Propagate the error
     }
   }
 }

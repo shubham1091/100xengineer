@@ -6,65 +6,82 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 export const PostForm = ({ post }) => {
-  const { register, handleSubmit, watch, setValue, control, getValues } =
-    useForm({
-      defaultValues: {
-        title: post?.title || "",
-        slug: post?.slug || "",
-        content: post?.content || "",
-        status: post?.status || "active",
-      },
-    });
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    control,
+    getValues,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      title: post?.title || "",
+      slug: post?.$id || "",
+      content: post?.content || "",
+      status: post?.status || "active",
+    },
+  });
 
   const navigate = useNavigate();
-  const userData = useSelector((state) => state.user.userData);
+  const userData = useSelector((state) => state.auth.userData);
 
   const submit = async (data) => {
     if (post) {
-      const file = data.image[0] ? service.uploadFile(data.image[0]) : null;
+      try {
+        const file = data.image[0]
+          ? await service.uploadFile(data.image[0])
+          : null;
 
-      if (file) {
-        service.deleteFile(post.featuredImage);
-      }
+        if (file) {
+          await service.deleteFile(post.featuredImage);
+        }
 
-      const dbPost = await service.updatePost(post.$id, {
-        ...data,
-        featuredImage: file ? file.$id : undefined,
-      });
+        const updatedPost = await service.updatePost(post.$id, {
+          ...data,
+          featuredImage: file ? file.$id : undefined,
+        });
 
-      if (dbPost) {
-        navigate(`/post/${dbPost.$id}`);
+        if (updatedPost) {
+          navigate(`/post/${updatedPost.$id}`);
+        }
+      } catch (error) {
+        console.error("Error updating post:", error);
+        // Handle error and provide feedback to the user
       }
     } else {
-      const file = data.image[0]
-        ? await service.uploadFile(data.image[0])
-        : null;
+      try {
+        const file = data.image[0]
+          ? await service.uploadFile(data.image[0])
+          : null;
 
-      if (file) {
-        data.featuredImage = file.$id;
+        if (file) {
+          data.featuredImage = file.$id;
+        }
 
-        const dbPost = await service.createPost({
+        const newPost = await service.createPost({
           ...data,
           userId: userData.$id,
         });
-        if (dbPost) {
-          navigate(`/post/${dbPost.$.id}`);
+
+        if (newPost) {
+          navigate(`/post/${newPost.$id}`);
         }
+      } catch (error) {
+        console.error("Error creating post:", error);
+        // Handle error and provide feedback to the user
       }
     }
   };
 
   const slugTransform = useCallback((value) => {
     if (value && typeof value === "string") {
-      //   const slug = value.toLowerCase().replace(/ /g, "-");
-      //   setValue("slug", slug);
-      //   return slug;
-
       return value
         .trim()
         .toLowerCase()
-        .replace(/^[a-zA-Z\d\s]+/g, "-")
-        .replace(/\s/g, "-");
+        .replace(/[^a-z0-9\s-]/g, "") // Remove invalid characters
+        .replace(/\s+/g, "-") // Replace spaces with hyphens
+        .replace(/-+/g, "-"); // Remove consecutive hyphens
     }
     return "";
   }, []);
@@ -72,11 +89,12 @@ export const PostForm = ({ post }) => {
   useEffect(() => {
     const subscription = watch((value, { name }) => {
       if (name === "title") {
-        setValue("slug", slugTransform(value.title, { shouldValidate: true }));
+        setValue("slug", slugTransform(value.title), { shouldValidate: true });
       }
     });
     return () => subscription.unsubscribe();
   }, [watch, slugTransform, setValue]);
+
   return (
     <form
       onSubmit={handleSubmit(submit)}
@@ -84,13 +102,16 @@ export const PostForm = ({ post }) => {
     >
       <div className="w-2/3 px-2">
         <Input
-          label="Title :"
+          label="Title:"
           placeholder="Title"
           className="mb-4"
           {...register("title", { required: true })}
         />
+        {errors.title && (
+          <span className="text-red-600">Title is required.</span>
+        )}
         <Input
-          label="Slug :"
+          label="Slug:"
           placeholder="Slug"
           className="mb-4"
           onInput={(e) => {
@@ -100,8 +121,9 @@ export const PostForm = ({ post }) => {
           }}
           {...register("slug", { required: true })}
         />
+        {errors.slug && <span className="text-red-600">Slug is required.</span>}
         <RTE
-          label="Content :"
+          label="Content:"
           name="content"
           control={control}
           defaultValue={getValues("content")}
@@ -109,7 +131,7 @@ export const PostForm = ({ post }) => {
       </div>
       <div className="w-1/3 px-2">
         <Input
-          label="Featured Image :"
+          label="Featured Image:"
           type="file"
           className="mb-4"
           accept="image/png, image/jpg, image/jpeg, image/gif"
@@ -130,6 +152,9 @@ export const PostForm = ({ post }) => {
           className="mb-4"
           {...register("status", { required: true })}
         />
+        {errors.status && (
+          <span className="text-red-600">Status is required.</span>
+        )}
         <Button
           type="submit"
           bgColor={post ? "bg-green-500" : undefined}

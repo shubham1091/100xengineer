@@ -6,8 +6,9 @@ export class AuthService {
   account;
 
   constructor() {
-    this.client.setEndpoint(config.appwriteUrl);
-    this.client.setProject(config.appwriteProjectId);
+    this.client
+      .setEndpoint(config.appwriteUrl)
+      .setProject(config.appwriteProjectId);
     this.account = new Account(this.client);
   }
 
@@ -20,11 +21,15 @@ export class AuthService {
         name
       );
       if (!userAccount.$id) {
-        // call another method
+        // Handle scenario where account creation failed
+        console.error("Account creation failed:", userAccount);
+        // Assuming you have a method to handle login fallback
+        return this.login({ email, password });
       }
       return userAccount;
     } catch (error) {
-      console.error(error);
+      console.error("Error creating account:", error.message, error.stack);
+      throw error; // Propagate the error to the caller
     }
   }
 
@@ -32,7 +37,8 @@ export class AuthService {
     try {
       return await this.account.createEmailPasswordSession(email, password);
     } catch (error) {
-      console.error(error);
+      console.error("Error logging in:", error.message, error.stack);
+      throw error; // Propagate the error to the caller
     }
   }
 
@@ -40,7 +46,8 @@ export class AuthService {
     try {
       return await this.account.get();
     } catch (error) {
-      console.error(error);
+      console.error("Error fetching current user:", error.message, error.stack);
+      throw error; // Propagate the error to the caller
     }
   }
 
@@ -48,7 +55,8 @@ export class AuthService {
     try {
       return await this.account.deleteSessions();
     } catch (error) {
-      console.error(error);
+      console.error("Error logging out:", error.message, error.stack);
+      throw error; // Propagate the error to the caller
     }
   }
 }

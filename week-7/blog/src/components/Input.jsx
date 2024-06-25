@@ -3,6 +3,7 @@ import { forwardRef, useId } from "react";
 export const Input = forwardRef(
   ({ label, type = "text", className = "", ...props }, ref) => {
     const id = useId();
+
     return (
       <div className="w-full">
         {label && (
