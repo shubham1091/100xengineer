@@ -30,48 +30,45 @@ export const Login = () => {
   };
 
   return (
-    <div className="flex items-center justify-center w-full">
-      <div className="mx-auto w-full max-w-lg bg-gray-100 rounded-xl p-10 border border-black/10">
-        <div className="mb-2 flex justify-center">
-          <span className="inline-block w-full max-w-[100px]">
-            <Logo width="100%" />
-          </span>
-        </div>
-        <h2 className="text-center text-2xl font-bold leading-tight">
-          Sign in to your account
-        </h2>
-        <p className="mt-2 text-center text-base text-black/60">
-          Don&apos;t have an account?&nbsp;
-          <Link
-            to="/signup"
-            className="font-medium text-primary transition-all duration-200 hover:underline"
-          >
-            Sign Up
-          </Link>
-        </p>
-        {error && <p className="text-red-600 mt-8 text-center">{error}</p>}
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="mt-8"
-        >
-          <div className="space-y-5">
+    <div className="flex items-center justify-center min-h-screen bg-gray-900 text-gray-100">
+      <div className="w-full max-w-md bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+        <div className="p-8">
+          <div className="flex justify-center">
+            <Logo width="100px" />
+          </div>
+          <h2 className="text-center text-2xl font-bold mt-4 mb-6">
+            Sign in to your account
+          </h2>
+          <p className="text-center text-sm text-gray-400 mb-4">
+            Don't have an account?{" "}
+            <Link
+              to="/signup"
+              className="text-primary hover:underline"
+            >
+              Sign Up
+            </Link>
+          </p>
+          {error && <p className="text-red-600 text-center mb-4">{error}</p>}
+          <form onSubmit={handleSubmit(onSubmit)}>
             <Input
-              label="Email: "
-              placeholder="Enter your email"
+              label="Email"
               type="email"
+              placeholder="Enter your email"
               {...register("email", {
-                required: true,
+                required: "Email is required",
                 pattern: {
                   value: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
-                  message: "Email address must be a valid address",
+                  message: "Email address must be valid",
                 },
               })}
+              className="mb-4"
             />
             <Input
-              label="Password: "
+              label="Password"
               type="password"
               placeholder="Enter your password"
-              {...register("password", { required: true })}
+              {...register("password", { required: "Password is required" })}
+              className="mb-6"
             />
             <Button
               type="submit"
@@ -79,8 +76,8 @@ export const Login = () => {
             >
               Sign in
             </Button>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
     </div>
   );

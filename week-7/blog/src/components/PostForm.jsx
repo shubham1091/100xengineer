@@ -27,50 +27,45 @@ export const PostForm = ({ post }) => {
   const userData = useSelector((state) => state.auth.userData);
 
   const submit = async (data) => {
-    if (post) {
-      try {
-        const file = data.image[0]
-          ? await service.uploadFile(data.image[0])
-          : null;
+    try {
+      let featuredImageId = post?.featuredImage; // To store current featured image ID
 
-        if (file) {
+      // Upload new image if provided
+      if (data.image[0]) {
+        const file = await service.uploadFile(data.image[0]);
+        featuredImageId = file.$id; // Update featuredImageId with new image ID
+      }
+
+      // If updating existing post
+      if (post) {
+        // Delete old featured image if a new one was uploaded
+        if (data.image[0] && post.featuredImage) {
           await service.deleteFile(post.featuredImage);
         }
 
         const updatedPost = await service.updatePost(post.$id, {
           ...data,
-          featuredImage: file ? file.$id : undefined,
+          featuredImage: featuredImageId,
         });
 
         if (updatedPost) {
           navigate(`/post/${updatedPost.$id}`);
         }
-      } catch (error) {
-        console.error("Error updating post:", error);
-        // Handle error and provide feedback to the user
-      }
-    } else {
-      try {
-        const file = data.image[0]
-          ? await service.uploadFile(data.image[0])
-          : null;
-
-        if (file) {
-          data.featuredImage = file.$id;
-        }
-
+      } else {
+        // Creating new post
         const newPost = await service.createPost({
           ...data,
           userId: userData.$id,
+          featuredImage: featuredImageId,
         });
 
         if (newPost) {
           navigate(`/post/${newPost.$id}`);
         }
-      } catch (error) {
-        console.error("Error creating post:", error);
-        // Handle error and provide feedback to the user
       }
+    } catch (error) {
+      console.error("Error:", error);
+      // Handle error and provide feedback to the user
     }
   };
 
@@ -100,7 +95,7 @@ export const PostForm = ({ post }) => {
       onSubmit={handleSubmit(submit)}
       className="flex flex-wrap"
     >
-      <div className="w-2/3 px-2">
+      <div className="w-full md:w-2/3 px-2">
         <Input
           label="Title:"
           placeholder="Title"
@@ -129,7 +124,7 @@ export const PostForm = ({ post }) => {
           defaultValue={getValues("content")}
         />
       </div>
-      <div className="w-1/3 px-2">
+      <div className="w-full md:w-1/3 px-2">
         <Input
           label="Featured Image:"
           type="file"
@@ -137,7 +132,7 @@ export const PostForm = ({ post }) => {
           accept="image/png, image/jpg, image/jpeg, image/gif"
           {...register("image", { required: !post })}
         />
-        {post && (
+        {post && post.featuredImage && (
           <div className="w-full mb-4">
             <img
               src={service.previewFile(post.featuredImage)}

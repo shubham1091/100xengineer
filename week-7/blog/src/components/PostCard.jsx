@@ -3,16 +3,20 @@ import { Link } from "react-router-dom";
 
 export const PostCard = ({ $id, title, featuredImage }) => {
   return (
-    <Link to={`/post/${$id}`}>
-      <div className="w-full bg-gray-100 rounded-xl p-4">
-        <div className="w-full justify-center mb-4">
-          <img
-            src={service.previewFile(featuredImage)}
-            alt={title}
-            className=" rounded-xl"
-          />
-        </div>
-        <h2 className="text-xl font-bold">{title}</h2>
+    <Link
+      to={`/post/${$id}`}
+      className="block rounded-lg overflow-hidden shadow-md hover:shadow-lg"
+    >
+      <div className="relative overflow-hidden">
+        <img
+          src={service.previewFile(featuredImage)} // Assuming this returns a valid image URL
+          alt={title}
+          className="object-cover w-full h-48"
+        />
+      </div>
+      <div className="p-4">
+        <h2 className="text-xl font-bold mb-2">{title}</h2>
+        {/* Additional metadata or excerpt can be added here if needed */}
       </div>
     </Link>
   );

@@ -13,16 +13,17 @@ export const Header = () => {
     { name: "All Posts", slug: "/all-posts", active: authStatus },
     { name: "Add Post", slug: "/add-post", active: authStatus },
   ];
+
   return (
-    <header className="py-3 shadow bg-gray-500">
+    <header className="py-4 shadow-lg bg-gray-900 text-gray-100">
       <Container>
-        <nav className="flex">
+        <nav className="flex items-center justify-between">
           <div className="mr-4">
             <Link to="/">
               <Logo width="70px" />
             </Link>
           </div>
-          <ul className="flex ml-auto">
+          <ul className="flex space-x-4">
             {navItems.map((item) =>
               item.active ? (
                 <li key={item.slug}>
@@ -30,7 +31,7 @@ export const Header = () => {
                     onClick={() => {
                       navigate(item.slug);
                     }}
-                    className="inline-block px-6 py-2 duration-200 hover:bg-blue-100 rounded-full"
+                    className="inline-block px-6 py-2 rounded-full text-gray-100 hover:bg-gray-700 transition-colors duration-300"
                   >
                     {item.name}
                   </button>

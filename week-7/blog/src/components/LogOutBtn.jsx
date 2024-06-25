@@ -7,11 +7,11 @@ export const LogOutBtn = () => {
 
   const logoutHandler = async () => {
     try {
-      await authService.logout();
-      dispatch(logOut());
+      await authService.logout(); // Assuming authService.logout() handles logout logic
+      dispatch(logOut()); // Dispatching logout action to update Redux state
     } catch (error) {
-      console.error("Logout error:", error.message);
-      // Handle error (e.g., show error message)
+      console.error("Logout error:", error.message); // Logging error to console
+      // Optionally, you can show an error message to the user
     }
   };
 
