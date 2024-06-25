@@ -4,6 +4,7 @@ import { Container, PostCard } from "../components";
 
 export const Home = () => {
   const [posts, setPosts] = useState([]);
+
   useEffect(() => {
     service.getPosts().then((posts) => {
       if (posts) setPosts(posts.documents);
@@ -25,6 +26,7 @@ export const Home = () => {
       </div>
     );
   }
+
   return (
     <div className="w-full py-8">
       <Container>

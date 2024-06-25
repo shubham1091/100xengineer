@@ -12,26 +12,43 @@ export const Post = () => {
 
   const userData = useSelector((state) => state.auth.userData);
 
+  // Determine if the current user is the author of the post
   const isAuthor = post && userData ? post.userId === userData.$id : false;
 
+  // Fetch the post based on the slug parameter
   useEffect(() => {
-    if (slug) {
-      service.getPost(slug).then((post) => {
-        if (post) setPost(post);
-        else navigate("/");
-      });
-    } else navigate("/");
+    const fetchPost = async () => {
+      try {
+        if (slug) {
+          const fetchedPost = await service.getPost(slug);
+          if (fetchedPost) {
+            setPost(fetchedPost);
+          } else {
+            navigate("/"); // If post not found, navigate to home page
+          }
+        } else {
+          navigate("/"); // If no slug, navigate to home page
+        }
+      } catch (error) {
+        console.error("Error fetching post:", error);
+        navigate("/"); // Handle error by navigating to home page
+      }
+    };
+
+    fetchPost();
   }, [slug, navigate]);
 
+  // Delete post handler
   const deletePost = () => {
     service.deletePost(post.$id).then((status) => {
       if (status) {
-        service.deleteFile(post.featuredImage);
-        navigate("/");
+        service.deleteFile(post.featuredImage); // Assuming this function deletes the featured image
+        navigate("/"); // After deletion, navigate to home page
       }
     });
   };
 
+  // Render the post details if post exists
   return post ? (
     <div className="py-8">
       <Container>
@@ -67,5 +84,5 @@ export const Post = () => {
         <div className="browser-css">{parse(post.content)}</div>
       </Container>
     </div>
-  ) : null;
+  ) : null; // If post is not fetched yet, render nothing (null)
 };
