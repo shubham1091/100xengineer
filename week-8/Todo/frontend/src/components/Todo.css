@@ -1,0 +1,64 @@
+.todos {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(300px, 1fr));
+  gap: var(--margin);
+  margin-bottom: var(--margin);
+}
+/* Todo Styles */
+.todo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: var(--padding);
+  margin-bottom: var(--margin);
+  background-color: #333;
+  color: #fff;
+  box-shadow: var(--box-shadow);
+}
+
+.todo.undone {
+  background-color: #444;
+  border-color: #666;
+}
+
+.todo.undone button {
+  padding: var(--padding);
+  background-color: var(--secondary-color);
+  color: #fff;
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.todo.undone button:hover {
+  background-color: var(--secondary-color-hover);
+}
+
+.todo.done {
+  background-color: #444;
+  border-color: #666;
+}
+
+.todo.done button {
+  padding: var(--padding);
+  background-color: var(--primary-color);
+  color: #fff;
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.todo.done button:hover {
+  background-color: var(--primary-color-hover);
+}
+
+.todo .description {
+  max-width: 300px;
+  overflow-y: auto; /* Enable vertical scrolling */
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
