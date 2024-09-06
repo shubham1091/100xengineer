@@ -1,0 +1,30 @@
+/* Create Todo Styles */
+.todo-form {
+  margin-bottom: var(--margin);
+}
+
+.todo-form input[type="text"] {
+  width: calc(100% - 2 * var(--padding));
+  padding: var(--padding);
+  margin-bottom: var(--padding);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  box-sizing: border-box;
+  background-color: #444;
+  color: #fff;
+}
+
+.todo-form button {
+  padding: var(--padding);
+  background-color: var(--primary-color);
+  color: #fff;
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  width: calc(100% - 2 * var(--padding));
+  transition: background-color 0.3s ease;
+}
+
+.todo-form button:hover {
+  background-color: var(--primary-color-hover);
+}

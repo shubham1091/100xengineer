@@ -1,0 +1,21 @@
+{
+  "name": "backend",
+  "module": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "bun --watch index.js",
+    "start": "bun index.js"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "mongoose": "^8.6.1",
+    "zod": "^3.23.8"
+  }
+}
