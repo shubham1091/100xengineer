@@ -1,5 +1,3 @@
-console.log("Hello via Bun!");
+import { connectDB } from "./db";
 
-const hello = (name: string) => `Hello ${name}!`;
-
-console.log(hello(process.env.SHUBHAM || "world"));
+connectDB();
