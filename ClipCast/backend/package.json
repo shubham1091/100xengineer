@@ -1,0 +1,21 @@
+{
+  "name": "backend",
+  "module": "src/index.ts",
+  "type": "module",
+  "scripts": {
+    "build": "bun build ./src/index.ts --outdir ./dist --target node",
+    "build:exe": "bun build --compile --outfile backend ./src/index.ts",
+    "dev": "bun --env-file=.env.local --watch run src/index.ts",
+    "format": "prettier --write .",
+    "start": "bun --env-file=.env.local run src/index.ts"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/node": "^22.7.4",
+    "prettier": "^3.3.3"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {}
+}
