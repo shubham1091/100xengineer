@@ -9,7 +9,7 @@ interface IUser extends Document {
   avatar: string;
   coverImage: string;
   watchHistory: Types.ObjectId[];
-  passowrd: string;
+  password: string;
   refreshToken: string;
 }
 
@@ -57,7 +57,7 @@ const userSchema = new Schema<IUser, UserModel, IUserMethods>(
         ref: "Video",
       },
     ],
-    passowrd: {
+    password: {
       type: String,
       required: [true, "Password is required"],
     },
@@ -72,12 +72,12 @@ userSchema.pre("save", async function (next) {
   if (!this.isModified("passowrd")) {
     return next();
   }
-  this.passowrd = await bcrypt.hash(this.passowrd, 10);
+  this.password = await bcrypt.hash(this.password, 10);
   next();
 });
 
 userSchema.methods.isPasswordCorrect = async function (password: string) {
-  return await bcrypt.compare(password, this.passowrd);
+  return await bcrypt.compare(password, this.password);
 };
 
 userSchema.methods.generateAccessToken = function () {
