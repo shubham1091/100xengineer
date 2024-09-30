@@ -1,9 +1,4 @@
-import {
-  Router,
-  type NextFunction,
-  type Request,
-  type Response,
-} from "express";
+import { Router } from "express";
 import { registerUser } from "../controllers/User.controller";
 import { upload } from "../middlewares/Multer.middleware";
 
