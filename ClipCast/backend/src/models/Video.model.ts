@@ -11,6 +11,8 @@ interface IVideo extends Document {
   views: number;
   isPublished: boolean;
   owner: Types.ObjectId;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const videoSchema = new Schema<IVideo>(
@@ -53,4 +55,4 @@ const videoSchema = new Schema<IVideo>(
 
 videoSchema.plugin(mongooseAggregatePaginate);
 
-export const Video = mongoose.model("Video", videoSchema);
+export const Video = mongoose.model<IVideo>("Video", videoSchema);

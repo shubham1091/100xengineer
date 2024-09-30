@@ -7,10 +7,12 @@ interface IUser extends Document {
   email: string;
   fullName: string;
   avatar: string;
-  coverImage: string;
+  coverImage?: string;
   watchHistory: Types.ObjectId[];
   password: string;
-  refreshToken: string;
+  refreshToken?: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 interface IUserMethods {
@@ -69,7 +71,7 @@ const userSchema = new Schema<IUser, UserModel, IUserMethods>(
 );
 
 userSchema.pre("save", async function (next) {
-  if (!this.isModified("passowrd")) {
+  if (!this.isModified("password")) {
     return next();
   }
   this.password = await bcrypt.hash(this.password, 10);
@@ -88,9 +90,9 @@ userSchema.methods.generateAccessToken = function () {
       username: this.username,
       fullName: this.fullName,
     },
-    process.env.ACCESS_TOKEN_SECRET,
+    process.env.ACCESS_TOKEN_SECRET as string,
     {
-      expiresIn: process.env.ACCESS_TOKEN_EXPIRY,
+      expiresIn: process.env.ACCESS_TOKEN_EXPIRY as string,
     }
   );
 };
@@ -100,9 +102,9 @@ userSchema.methods.generateRefreshToken = function () {
     {
       _id: this._id,
     },
-    process.env.REFRESH_TOKEN_SECRET,
+    process.env.REFRESH_TOKEN_SECRET as string,
     {
-      expiresIn: process.env.REFRESH_TOKEN_EXPIRY,
+      expiresIn: process.env.REFRESH_TOKEN_EXPIRY as string,
     }
   );
 };
