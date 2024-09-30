@@ -23,8 +23,13 @@ export const Upload = async (
     Logger.info(`File uploaded successfully: ${response.url}`);
     return response;
   } catch (error) {
-    fs.unlinkSync(localFilePath);
     Logger.error(`Error uploading file: ${(error as Error).message}`);
     return null;
+  } finally {
+    try {
+      fs.unlinkSync(localFilePath);
+    } catch (unlinkError) {
+      Logger.warn(`Error deleting local file: ${(unlinkError as Error).message}`);
+    }
   }
 };
