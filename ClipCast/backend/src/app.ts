@@ -23,3 +23,9 @@ app.use(cookieParser());
 import { userRouter } from "./routes/User.routes";
 
 app.use("/api/v1/users", userRouter);
+
+// Error handling middleware
+app.use((err: any, req: any, res: any, next: any) => {
+  console.error(err.stack);
+  res.status(500).send('Something went wrong!');
+});
