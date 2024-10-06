@@ -1,0 +1,18 @@
+version: "3.9"
+
+name: todo-app
+
+services:
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD=admin_password
+      - POSTGRES_USER=admin
+      - POSTGRES_DB=todo
+    ports:
+      - 5432:5432
+    volumes:
+      - ./db-data:/var/lib/postgresql/data
+
+volumes:
+  db-data:
