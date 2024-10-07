@@ -1,0 +1,50 @@
+# Node modules
+
+node_modules
+
+# Logs
+
+npm-debug.log*
+
+# Environment variables
+
+.env
+
+# Version control
+
+.git
+.gitignore
+
+# IDE specific files
+
+.vscode
+.idea
+
+# OS generated files
+
+.DS_Store
+Thumbs.db
+
+# Build output
+
+dist
+build
+
+# Test coverage
+
+coverage
+
+# Temporary files
+
+_.tmp
+_.temp
+
+# Docker files (optional, depending on your workflow)
+
+Dockerfile
+docker-compose.yml
+
+# README and other documentation
+
+README.md
+\*.md
