@@ -3,7 +3,6 @@ import { createAnswerCollection } from "./answers.collection";
 import { createCommentCollection } from "./comments.collection";
 import { createQuestionCollection } from "./questions.collection";
 import { createVoteCollection } from "./votes.collection";
-import { getOrCreateStorage } from "./storage.collection";
 import { databases } from "./config";
 
 export const getOrCreateDB = async () => {
@@ -11,7 +10,10 @@ export const getOrCreateDB = async () => {
     await databases.get(db);
     console.log("database already exists");
     console.log("database connected");
-  } catch (error) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  } catch (err) {
+    console.log("database not found creating database");
+
     try {
       await databases.create(db, db);
       console.log("database created");
@@ -21,13 +23,12 @@ export const getOrCreateDB = async () => {
         createAnswerCollection(),
         createCommentCollection(),
         createVoteCollection(),
-        getOrCreateStorage(),
       ]);
 
       console.log("Collections created");
       console.log("database connected");
     } catch (error) {
-      console.log("Error creating database: ", error);
+      console.error("Error creating database: ", error);
     }
 
     return databases;

@@ -8,8 +8,9 @@ export const getOrCreateStorage = async () => {
     console.log("storage already exists");
 
     console.log("storage connected");
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (err) {
-    console.log("Error getting storage: ", err);
+    console.log("storage not found creating storage");
     try {
       await storage.createBucket(
         questionAttachmentBucket,
@@ -32,7 +33,7 @@ export const getOrCreateStorage = async () => {
       console.log("storage created");
       console.log("storage connected");
     } catch (error) {
-      console.log("Error creating storage: ", error);
+      console.error("Error creating storage: ", error);
     }
   }
 };

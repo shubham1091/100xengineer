@@ -5,7 +5,7 @@ export const client = new Client();
 
 client
   .setEndpoint(env.appwrite.endpoint)
-  .setEndpoint(env.appwrite.projectId)
+  .setProject(env.appwrite.projectId)
   .setKey(env.appwrite.apiKey);
 
 export const databases = new Databases(client);
