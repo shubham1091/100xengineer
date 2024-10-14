@@ -1,5 +1,6 @@
+"use client";
 import { useAuthStore } from "@/store/Auth";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { ReactNode, useEffect } from "react";
 
 const Layout = ({ children }: { children: ReactNode }) => {
@@ -17,8 +18,8 @@ const Layout = ({ children }: { children: ReactNode }) => {
   }
 
   return (
-    <div className="">
-      <div className="">{children}</div>
+    <div className="relative flex min-h-screen flex-col items-center justify-center py-12">
+      <div className="relative">{children}</div>
     </div>
   );
 };
