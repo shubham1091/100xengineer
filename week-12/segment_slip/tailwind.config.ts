@@ -55,6 +55,67 @@ const config: Config = {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
   			sm: 'calc(var(--radius) - 4px)'
+  		},
+  		animation: {
+  			'border-beam': 'border-beam calc(var(--duration)*1s) infinite linear',
+  			'background-position-spin': 'background-position-spin 3000ms infinite alternate',
+  			grid: 'grid 15s linear infinite',
+  			'shimmer-slide': 'shimmer-slide var(--speed) ease-in-out infinite alternate',
+  			'spin-around': 'spin-around calc(var(--speed) * 2) infinite linear',
+  			shine: 'shine var(--duration) infinite linear'
+  		},
+  		keyframes: {
+  			'border-beam': {
+  				'100%': {
+  					'offset-distance': '100%'
+  				}
+  			},
+  			'background-position-spin': {
+  				'0%': {
+  					backgroundPosition: 'top center'
+  				},
+  				'100%': {
+  					backgroundPosition: 'bottom center'
+  				}
+  			},
+  			grid: {
+  				'0%': {
+  					transform: 'translateY(-50%)'
+  				},
+  				'100%': {
+  					transform: 'translateY(0)'
+  				}
+  			},
+  			'shimmer-slide': {
+  				to: {
+  					transform: 'translate(calc(100cqw - 100%), 0)'
+  				}
+  			},
+  			'spin-around': {
+  				'0%': {
+  					transform: 'translateZ(0) rotate(0)'
+  				},
+  				'15%, 35%': {
+  					transform: 'translateZ(0) rotate(90deg)'
+  				},
+  				'65%, 85%': {
+  					transform: 'translateZ(0) rotate(270deg)'
+  				},
+  				'100%': {
+  					transform: 'translateZ(0) rotate(360deg)'
+  				}
+  			},
+  			shine: {
+  				'0%': {
+  					'background-position': '0% 0%'
+  				},
+  				'50%': {
+  					'background-position': '100% 100%'
+  				},
+  				to: {
+  					'background-position': '0% 0%'
+  				}
+  			}
   		}
   	}
   },
